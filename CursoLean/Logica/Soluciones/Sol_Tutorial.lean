@@ -1,5 +1,7 @@
 import Mathlib.Tactic
 
+
+section prop
 /-
 # Lógica de proposiciones en Lean
 
@@ -165,3 +167,16 @@ example : (¬a → b) → (¬a → ¬b) → a := by
   · exact hna
   · apply hnab
     exact hna
+
+end prop
+
+
+section fol
+/-
+# Lógica de primer orden
+Una fórmula con una vriable, como x²=0, es una expresión que al darle
+un valor específico a la variable se vuelve una proposición, como
+1²=0.
+-/
+
+end fol

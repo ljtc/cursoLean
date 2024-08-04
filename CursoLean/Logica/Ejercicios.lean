@@ -1,5 +1,7 @@
 import Mathlib.Tactic
 
+section prop
+
 variable (a b c : Prop)
 
 /-
@@ -56,3 +58,5 @@ En esta sección hay que usar
 example : ¬¬a → a := by sorry
 
 example : ¬¬a → a := by sorry
+
+end prop
