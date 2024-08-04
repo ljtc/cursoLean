@@ -60,3 +60,33 @@ example : ¬¬a → a := by sorry
 example : ¬¬a → a := by sorry
 
 end prop
+
+
+
+section fol
+
+variable (α : Type) (p q r : α → Prop)
+
+example : (∀ x, p x ∧ q x) → (∀ x, p x) ∧ (∀ x, q x) := by sorry
+
+example : (∀ x, p x → q x) → (∀ x, p x) → (∀ x, q x) := by sorry
+
+
+/-
+Esta última es más difícil. Se sugiere usar el lema, aún así es
+mucho más complicada que todo lo anteior.
+-/
+
+lemma c_iff_noc (c : Prop) : ¬(c ↔ ¬c) := by
+  intro ⟨h1, h2⟩
+  have nc : ¬c := by sorry
+  have nnc : ¬¬c := by sorry
+  sorry
+
+variable (men : Type) (barber : men)
+variable (shaves : men → men → Prop)
+
+example (h : ∀ x : men, shaves barber x ↔ ¬ shaves x x) : False := by
+  sorry
+
+end fol

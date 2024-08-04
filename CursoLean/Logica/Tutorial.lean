@@ -1,5 +1,7 @@
 import Mathlib.Tactic
 
+
+section prop
 /-
 # Lógica de proposiciones en Lean
 
@@ -114,3 +116,55 @@ example : (a → b) → (a → ¬b) → ¬a := by sorry
 example : (¬b → ¬a) → (a → b) := by sorry
 
 example : (¬a → b) → (¬a → ¬b) → a := by sorry
+
+end prop
+
+
+
+section fol
+/-
+# Lógica de primer orden
+Una fórmula con una vriable, como x²=0, es una expresión que al darle
+un valor específico a la variable se vuelve una proposición, como
+1²=0. En este sentido, la fórmula x²=0 es una función que a cada valor
+de x le asigna una proposición.
+
+En Lean tenemos que decir que tipo de varuable le pasaremos a una
+fórmula. En el ejemplo de arriba, es diferente pasarle el 1 como
+número natural a pasarle el 1 como real.
+
+
+## Notación
+
+En esta sección usaremos los siguientes símbolos
+
+| símbolo |    nombre     | en Lean |
+| :-----: | :-----------: | :------ |
+|    ∃    |  existencial  | `\ex`   |
+|    ∀    |   universal   | `\fo`   |
+
+
+## Tácticas
+
+Además de las tácticas para proposiciones, ahora usaremos
+* `use`
+-/
+
+variable (α : Type) (p q r : α → Prop)
+
+
+--## Ejemplos
+
+--### Caso particular
+example (a : α) : (∀ x, p x) → p a := by sorry
+
+--### Testigo
+example (a : α) : p a → ∃ x, p x := by sorry
+
+--### Otras
+example : (∀ x, p x ∧ q x) → ∀ x, p x := by sorry
+
+example : (∃ x, p x ∧ q x) → (∃ x, p x) ∧ (∃ x, q x) := by sorry
+
+
+end fol

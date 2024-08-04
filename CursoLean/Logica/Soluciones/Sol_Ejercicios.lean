@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 
+section prop
 variable (a b c : Prop)
 
 /-
@@ -92,3 +93,52 @@ example : ¬¬a → a := by
   intro hn
   by_contra hna
   contradiction
+
+end prop
+
+
+
+section fol
+
+variable (α : Type) (p q r : α → Prop)
+
+example : (∀ x, p x ∧ q x) → (∀ x, p x) ∧ (∀ x, q x) := by
+  intro h
+  constructor
+  · intro a
+    rcases (h a) with ⟨pa, _⟩
+    exact pa
+  · intro a
+    rcases (h a) with ⟨_, qa⟩
+    exact qa
+
+example : (∀ x, p x → q x) → (∀ x, p x) → (∀ x, q x) := by
+  intro h h' a
+  apply (h a)
+  exact h' a
+
+
+/-
+Esta última es más difícil. Se sugiere usar el lema, aún así es
+mucho más complicada que todo lo anteior.
+-/
+
+lemma c_iff_noc (c : Prop) : ¬(c ↔ ¬c) := by
+  intro ⟨h1, h2⟩
+  have nc : ¬c := by
+    intro hc
+    exact (h1 hc) hc
+  have nnc : ¬¬c := by
+    intro hnc
+    exact hnc (h2 hnc)
+  exact nnc nc
+
+variable (men : Type) (barber : men)
+variable (shaves : men → men → Prop)
+
+example (h : ∀ x : men, shaves barber x ↔ ¬ shaves x x) : False := by
+  have : shaves barber barber ↔ ¬shaves barber barber := by
+    apply h barber
+  exact (c_iff_noc (shaves barber barber)) this
+
+end fol

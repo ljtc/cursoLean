@@ -1,5 +1,7 @@
 import Mathlib.Tactic.ByContra
 import Mathlib.Tactic.Cases
+import Mathlib.Tactic.Use
+
 /-
 # Tácticas para lógica
 En este archivo veremos una breve descripción de las tácticas que se
@@ -189,3 +191,20 @@ example : a ∨ ¬a := by
   by_cases h : a
   · left; exact h
   · right; exact h
+
+
+/-
+## use
+Esta táctica sirve para demostrar enunciados existenciales. Por ejemplo,
+si tenemos que demostrar `∃ x, p x` y tenemos `a : α`, entonces
+`use a` cambia el goal por `p a`. Además, revisa si `p a` era una
+hipótesis en cuyo caso cierra el goal.
+
+Requiere `import Mathlib.Tactic.Use`
+-/
+example (α : Type)(p : α → Prop) (a : α) : ∃ x, p x := by
+  use a
+  sorry
+
+example (α : Type)(p : α → Prop) (a : α) (ha : p a) : ∃ x, p x := by
+  use a
