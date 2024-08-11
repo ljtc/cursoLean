@@ -74,6 +74,7 @@ open Set
 
 --Sean s, t y u conjuntos de tipo `α`
 variable (α : Type*) (s t u : Set α)
+--Sean A y B familias de conjuntos
 variable (ι : Type*) (A B : ι → Set α)
 
 
