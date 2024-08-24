@@ -22,8 +22,8 @@ tipo `ι : Type` que servira como colección de índices y una función
 Además de los conectivos y cuantificadores de la parte de lógica, en
 esta sección usaremos los siguientes símbolos
 
-| símbolo |    nombre    |    en Lean    |
-| :-----_ | :----------- | :------------ |
+| símbolo | nombre       | en Lean       |
+| :------ | :----------- | :------------ |
 | ∈       | pertenecia   | `\in`         |
 | ⊆       | subconjunto  | `\sub`        |
 | ∩       | intersección | `\cap`        |
@@ -52,7 +52,7 @@ están en la biblioteca de matemáticas de Lean. Además de que será una
 primera oportunidad de ver las convenciones de nombres que sigue Lean.
 https://leanprover-community.github.io/contribute/naming.html
 
-Se sugiere poner el cursor al final de cada línea o pasar el cursor
+Se sugiere poner el cursor al final de cada línea o pasar el puntero
 sobre el nombre para ver la definición y tener alguna explicación.
 -/
 
