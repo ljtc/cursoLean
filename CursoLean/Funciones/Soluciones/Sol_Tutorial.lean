@@ -56,12 +56,20 @@ open Set
 #print Injective
 #print Surjective
 #print Bijective
+#print LeftInverse
+#print RightInverse
 
 --Sean `α` y `β`dos tipos
 variable (α β γ : Type*)
 
 --Sea `f` una función de `α` en `β`
-variable (f : α → β) (g : β → γ)
+variable (f : α → β)
+
+--Sea `g` una función de `β` en `γ`
+variable (g : β → γ)
+
+--Sea `h` una función de `β` en `α`
+variable (h : β → α)
 
 --Sean `s`, `t` suconjuntos de `α` y `u`, `v` subconjuntos de `β`
 variable (s t : Set α) (u v : Set β)
@@ -156,6 +164,8 @@ example (injgf : Injective (g ∘ f)) : Injective f := by
   rw [comp_apply, comp_apply]
   apply congrArg
   exact h
+
+example (h : LeftInverse h f) : Injective f := by sorry
 
 --### Funciones suprayectivas
 example (surf : Surjective f) (surg : Surjective g) :
