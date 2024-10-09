@@ -69,7 +69,7 @@ variable (f : α → β)
 variable (g : β → γ)
 
 --Sea `h` una función de `β` en `α`
-variable (h : β → α)
+variable (k : β → α)
 
 --Sean `s`, `t` suconjuntos de `α` y `u`, `v` subconjuntos de `β`
 variable (s t : Set α) (u v : Set β)
@@ -165,7 +165,23 @@ example (injgf : Injective (g ∘ f)) : Injective f := by
   apply congrArg
   exact h
 
-example (h : LeftInverse h f) : Injective f := by sorry
+example (h : LeftInverse k f) : Injective f := by
+  intro a b h1
+  have : k (f a) = k (f b) := by
+    apply congrArg
+    assumption
+  rw [LeftInverse] at h
+  rw [<-(h a), <-(h b)]
+  assumption
+
+example (h : LeftInverse k f) : Injective f := by
+  rw [LeftInverse] at h
+  intro a b fab
+  calc
+    a = k (f a) := by apply (h a).symm
+    _ = k (f b) := by rw [fab]
+    _ = b       := by apply h
+
 
 --### Funciones suprayectivas
 example (surf : Surjective f) (surg : Surjective g) :
@@ -186,3 +202,9 @@ example (srgf: Surjective (g ∘ f)) : Surjective g := by
     exact srgf z
   use (f x)
   exact cxz
+
+example (h : RightInverse k f) : Surjective f := by
+  intro y
+  use k y
+  rw [Function.RightInverse, LeftInverse] at h
+  apply h
