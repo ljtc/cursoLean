@@ -1,4 +1,5 @@
 import Mathlib.Algebra.Group.Defs
+import Mathlib.Tactic.Use
 
 namespace Gru
 
@@ -86,3 +87,32 @@ example (h1 : y * x = 1) (h2 : x * z = 1) : y = z := by
     _ = (y * x) * z := by rw [Grupo.mul_assoc]
     _ = 1 * z       := by rw [h1]
     _ = z           := by rw [Grupo.one_mul]
+
+/-
+Multiplicar por x es inyectiva
+-/
+theorem mul_iny (h : x * y = x * z) : y = z := by
+  rw [<-Grupo.one_mul y, <-Grupo.inv_mul_cancel x]
+  rw [Grupo.mul_assoc, h, <-Grupo.mul_assoc]
+  rw [Grupo.inv_mul_cancel, Grupo.one_mul]
+
+/-
+El inverso del inverso es el original
+-/
+theorem inv_inv : (x⁻¹)⁻¹ = x := by
+  apply mul_iny _ x⁻¹
+  rw [Grupo.inv_mul_cancel, mul_inv_cancel]
+
+theorem mul_inv : (x * y)⁻¹ = y⁻¹ * x⁻¹ := by
+  apply mul_iny _ (x * y)
+  rw [mul_inv_cancel, Grupo.mul_assoc, <-Grupo.mul_assoc y]
+  rw [mul_inv_cancel, Grupo.one_mul, mul_inv_cancel]
+
+/-
+Multiplicar por x es suprayectiva
+-/
+theorem mul_sup : ∀ (a : G), ∃ (b : G), x * b = a := by
+  intro a
+  use x⁻¹ * a
+  rw [<-Grupo.mul_assoc, mul_inv_cancel, Grupo.one_mul]
+end Gru
