@@ -123,10 +123,23 @@ example : ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
 
 
 example : ∑ i in range (n + 1), i ^ 2 = n * (n + 1) * (2 * n + 1) / 6 := by
-  sorry
-
-example : ∑ i in range (n + 1), i ^ 2 = n * (n + 1) * (2 * n + 1) / 6 := by
-  sorry
+  symm
+  apply Nat.div_eq_of_eq_mul_right (by norm_num : 0 < 6)
+  symm
+  induction' n with n ih
+  · rw [sum_range_succ, sum_range_zero, pow_two, mul_zero, add_zero, mul_zero]
+    rw [zero_mul, zero_mul]
+  · calc 6 * ∑ i in range (n + 1 + 1), i ^ 2
+    _ = 6 * ∑ i in range (n + 1), i ^ 2  + 6 * (n + 1) ^ 2 := by
+      rw [sum_range_succ, mul_add]
+    _ = n * (n + 1) * (2 * n + 1) + 6 * (n + 1) ^ 2 := by rw [ih]
+    _ = (n + 1) * (n * (2 * n + 1) + 6 * (n + 1)) := by
+      --rw [pow_two, mul_comm n, mul_comm 6, mul_assoc _ _ 6, mul_assoc]
+      --rw [<-mul_add (n + 1), mul_comm (n + 1) 6]
+      ring
+    _ = (n + 1) * (2 * n ^ 2 + n + 6 * n + 6) := by ring
+    _ = (n + 1) * (2 * n ^ 2 + 7 * n + 6) := by ring
+    _ = (n + 1) * (n + 2) * (2 * n + 3) := by ring
 
 
 /-
@@ -134,7 +147,34 @@ example : ∑ i in range (n + 1), i ^ 2 = n * (n + 1) * (2 * n + 1) / 6 := by
 -/
 
 #check two_le_iff
+#check Nat.prime_def_lt
+#check zero_dvd_iff
+#check dvd_trans
 
 theorem exists_prime_factor {n : Nat} (h : 2 ≤ n) :
     ∃ p : Nat, p.Prime ∧ p ∣ n := by
-  sorry
+  induction' n using Nat.strong_induction_on with n ih
+  by_cases np : n.Prime
+  · use n
+  · rw [Nat.prime_def_lt] at np
+    push_neg at np
+    have : ∃ m < n, m ∣ n ∧ m ≠ 1 := by exact np h
+    obtain ⟨m, ⟨mn, ⟨mdn, mne1⟩⟩⟩ := this
+    have : m ≠ 0 := by
+      intro h
+      rw [h, zero_dvd_iff] at mdn
+      rw [h, mdn] at mn
+      contradiction
+    have le_m : 2 ≤ m := by
+      apply (two_le_iff m).mpr
+      --constructor
+      --assumption'
+      exact ⟨this, mne1⟩
+    have primo : ∃ p, Nat.Prime p ∧ p ∣ m := by
+      apply ih
+      assumption'
+    obtain ⟨p, ⟨pp, pdm⟩⟩ := primo
+    use p
+    constructor
+    · assumption
+    · apply pdm.trans mdn
