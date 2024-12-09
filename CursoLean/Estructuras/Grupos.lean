@@ -1,5 +1,6 @@
 import Mathlib.Algebra.Group.Defs
-import Mathlib.Tactic.Use
+import Mathlib.Algebra.Ring.Units
+import Mathlib.Tactic
 
 namespace Gru
 
@@ -39,7 +40,7 @@ class Grupo (G : Type*) extends One G, Mul G, Inv G where
   inv_mul_cancel : ∀ x : G, x⁻¹ * x = 1
 
 
-variable (G : Type*) [Grupo G]
+variable (G H : Type*) [Grupo G]
 variable (x y z : G)
 
 
@@ -115,4 +116,76 @@ theorem mul_sup : ∀ (a : G), ∃ (b : G), x * b = a := by
   intro a
   use x⁻¹ * a
   rw [<-Grupo.mul_assoc, mul_inv_cancel, Grupo.one_mul]
+
+
+/-
+Ejemplo 1. El unitario es un grupo
+-/
+inductive unitario where
+  | unit : unitario
+
+instance : Grupo (unitario) where
+  one := unitario.unit
+  mul _ _ := unitario.unit
+  inv _ := unitario.unit
+  mul_assoc := by simp
+  one_mul := by simp
+  inv_mul_cancel := by simp
+
+/-
+Ejemplos 2. Las unidades de un anillo son un grupo
+-/
+variable (R : Type*) [CommRing R]
+
+#check IsUnit
+#print IsUnit
+#check inv_mul_self
+#check inv_mul_cancel
+
+
+
+example : IsUnit (1 : R) := by
+  rw [IsUnit]
+  use 1
+  simp
+
+instance : Grupo (Rˣ) where
+  mul_assoc := by
+    intro a b c
+    exact mul_assoc a b c
+  one_mul := by
+    intro a
+    exact one_mul a
+  inv_mul_cancel := by
+    intro a
+    exact inv_mul_self a
+
+def esunidad {R : Type*} [Ring R] (x : R) : Prop :=
+  ∃ y : R, y * x = 1
+
+/-
+TODO: Revisar comportamiento de unidades en Lean
+-/
+
+
+/-
+Subgrupo
+-/
+@[ext]
+structure Subgrupo (G : Type*) [Grupo G] where
+  carrier : Set G
+  mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
+  one_mem : 1 ∈ carrier
+  inv_mem {a} : a ∈ carrier → a⁻¹ ∈ carrier
+
+/-
+El carrier de un subgrupo es un conjunto
+-/
+#check SetLike
+
+instance [Grupo G] : SetLike (Subgrupo G) G where
+  coe := Subgrupo.carrier
+  coe_injective' := Subgrupo.ext
+
+
 end Gru
