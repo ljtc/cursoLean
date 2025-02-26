@@ -38,11 +38,11 @@ enunciado universal. Si se quiere demostrar `∀ x, p x`, entonces `intro w`
 introduce el término `w` y cambia el goal por `p w`
 -/
 example : a → b := by
-  intro ha
+  intro ha --supongamos a PD b
   sorry
 
 example : ∀ x, p x := by
-  intro w
+  intro w --sea w PD p w
   sorry
 
 
@@ -77,10 +77,10 @@ example (h : a → b) (ha : a) : b := by
   apply h
   exact ha
 
-example (ha : a) (hb : b) (h : a → b → b)  : b := by
+example (ha : a) (hc : c) (h : a → (c → b))  : b := by
   apply h
   · exact ha
-  · exact hb
+  · exact hc
 
 example (h : a → b) (ha : a) : b := by
   apply h ha
@@ -115,8 +115,8 @@ que es una conjunción se puede destruir al mismo con
 `intro ⟨ha,hb⟩`
 -/
 example : (a ∧ b) → a := by
-  intro ⟨ha, hb⟩
-  exact ha
+  intro ⟨ha, _⟩
+  assumption
 
 
 /-
@@ -130,6 +130,7 @@ example (ha : a) (hb : b) : a ∧ b := by
   constructor
   · exact ha
   · exact hb
+
 example : a ↔ b := by
   constructor
   · sorry
